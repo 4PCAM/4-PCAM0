@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4-PCAM Test</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 4-PCAM Test Page</h1>
+        </div>
+        <div class="content">
+            <div class="assessment-header">
+                <h3>JavaScript Loading Test</h3>
+            </div>
+            <div class="instructions">
+                <p>Click the button below to test if JavaScript is working:</p>
+                <button class="btn btn-primary" onclick="testFunction()">Test JavaScript</button>
+                <div id="test-result" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        function testFunction() {
+            const resultDiv = document.getElementById('test-result');
+            
+            // Test if assessmentData is defined
+            if (typeof assessmentData !== 'undefined') {
+                resultDiv.innerHTML = '<div class="status-message status-success">✅ JavaScript is working! assessmentData object is loaded.</div>';
+                
+                // Test if startAssessment function exists
+                if (typeof startAssessment === 'function') {
+                    resultDiv.innerHTML += '<div class="status-message status-success">✅ startAssessment function is available.</div>';
+                } else {
+                    resultDiv.innerHTML += '<div class="status-message status-danger">❌ startAssessment function is missing.</div>';
+                }
+            } else {
+                resultDiv.innerHTML = '<div class="status-message status-danger">❌ JavaScript is not working properly. assessmentData is not defined.</div>';
+            }
+        }
+    </script>
+</body>
+</html>
