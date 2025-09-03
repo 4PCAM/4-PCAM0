@@ -1,4 +1,4 @@
-// Global data storage
+// Global data storage - This must be defined at the top level
 let assessmentData = {
     patient: {},
     agni: { vishama: 0, tikshna: 0, manda: 0, sama: 0 },
@@ -224,3 +224,8 @@ if (document.readyState === 'loading') {
 } else {
     setupAutoSave();
 }
+
+// Make functions globally available
+window.startAssessment = startAssessment;
+window.goToMain = goToMain;
+window.completeAssessment = completeAssessment;
