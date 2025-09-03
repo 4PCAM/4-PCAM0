@@ -20,6 +20,13 @@
                 <button class="btn btn-primary" onclick="testFunction()">Test JavaScript</button>
                 <div id="test-result" style="margin-top: 20px;"></div>
             </div>
+            
+            <div class="instructions" style="margin-top: 30px;">
+                <h4>Manual Tests:</h4>
+                <button class="btn btn-secondary" onclick="testLocalStorage()">Test LocalStorage</button>
+                <button class="btn btn-secondary" onclick="testNavigation()">Test Navigation</button>
+                <div id="manual-test-result" style="margin-top: 20px;"></div>
+            </div>
         </div>
     </div>
 
@@ -27,10 +34,11 @@
     <script>
         function testFunction() {
             const resultDiv = document.getElementById('test-result');
+            resultDiv.innerHTML = '';
             
             // Test if assessmentData is defined
             if (typeof assessmentData !== 'undefined') {
-                resultDiv.innerHTML = '<div class="status-message status-success">✅ JavaScript is working! assessmentData object is loaded.</div>';
+                resultDiv.innerHTML += '<div class="status-message status-success">✅ JavaScript is working! assessmentData object is loaded.</div>';
                 
                 // Test if startAssessment function exists
                 if (typeof startAssessment === 'function') {
@@ -38,10 +46,77 @@
                 } else {
                     resultDiv.innerHTML += '<div class="status-message status-danger">❌ startAssessment function is missing.</div>';
                 }
+                
+                // Test if goToMain function exists
+                if (typeof goToMain === 'function') {
+                    resultDiv.innerHTML += '<div class="status-message status-success">✅ goToMain function is available.</div>';
+                } else {
+                    resultDiv.innerHTML += '<div class="status-message status-danger">❌ goToMain function is missing.</div>';
+                }
+                
+                // Show assessmentData structure
+                resultDiv.innerHTML += '<div class="status-message status-info">ℹ️ assessmentData structure: ' + JSON.stringify(assessmentData) + '</div>';
+                
             } else {
-                resultDiv.innerHTML = '<div class="status-message status-danger">❌ JavaScript is not working properly. assessmentData is not defined.</div>';
+                resultDiv.innerHTML += '<div class="status-message status-danger">❌ JavaScript is not working properly. assessmentData is not defined.</div>';
+                
+                // Check if main.js loaded
+                const scripts = document.querySelectorAll('script');
+                resultDiv.innerHTML += '<div class="status-message status-info">ℹ️ Found ' + scripts.length + ' script tags:</div>';
+                scripts.forEach((script, index) => {
+                    resultDiv.innerHTML += '<div class="status-message status-info">ℹ️ Script ' + index + ': ' + script.src + '</div>';
+                });
             }
         }
+        
+        function testLocalStorage() {
+            const resultDiv = document.getElementById('manual-test-result');
+            resultDiv.innerHTML = '';
+            
+            try {
+                localStorage.setItem('test', 'test');
+                const value = localStorage.getItem('test');
+                localStorage.removeItem('test');
+                
+                if (value === 'test') {
+                    resultDiv.innerHTML = '<div class="status-message status-success">✅ LocalStorage is working correctly.</div>';
+                } else {
+                    resultDiv.innerHTML = '<div class="status-message status-danger">❌ LocalStorage is not working correctly.</div>';
+                }
+            } catch (e) {
+                resultDiv.innerHTML = '<div class="status-message status-danger">❌ LocalStorage error: ' + e.message + '</div>';
+            }
+        }
+        
+        function testNavigation() {
+            const resultDiv = document.getElementById('manual-test-result');
+            resultDiv.innerHTML = '';
+            
+            try {
+                // Test if we can navigate to index.html
+                resultDiv.innerHTML = '<div class="status-message status-info">ℹ️ Testing navigation to index.html...</div>';
+                
+                // Check if index.html exists by attempting to fetch it
+                fetch('index.html')
+                    .then(response => {
+                        if (response.ok) {
+                            resultDiv.innerHTML += '<div class="status-message status-success">✅ index.html exists and is accessible.</div>';
+                        } else {
+                            resultDiv.innerHTML += '<div class="status-message status-danger">❌ index.html returned status: ' + response.status + '</div>';
+                        }
+                    })
+                    .catch(error => {
+                        resultDiv.innerHTML += '<div class="status-message status-danger">❌ Error accessing index.html: ' + error.message + '</div>';
+                    });
+            } catch (e) {
+                resultDiv.innerHTML = '<div class="status-message status-danger">❌ Navigation test error: ' + e.message + '</div>';
+            }
+        }
+        
+        // Auto-run test when page loads
+        window.addEventListener('load', function() {
+            setTimeout(testFunction, 1000);
+        });
     </script>
 </body>
 </html>
